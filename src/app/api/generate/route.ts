@@ -1,5 +1,5 @@
 import { NextRequest } from "next/server";
-import { getAnthropicClient, MODEL } from "@/lib/anthropic";
+import { getAIClient, MODEL } from "@/lib/ai";
 import {
   roastPrompt,
   improvementsPrompt,
@@ -69,7 +69,7 @@ export async function POST(req: NextRequest) {
     );
   }
 
-  const anthropic = getAnthropicClient();
+  const ai = getAIClient();
 
   const stream = new ReadableStream({
     async start(controller) {
@@ -89,19 +89,21 @@ export async function POST(req: NextRequest) {
         for (const { name, prompt } of sections) {
           controller.enqueue(encodeLine({ type: "start", section: name }));
 
-          const messageStream = anthropic.messages.stream({
+          const chatStream = await ai.chat.completions.create({
             model: MODEL,
             max_tokens: 1500,
             messages: [{ role: "user", content: prompt }],
+            stream: true,
           });
 
-          messageStream.on("text", (delta) => {
-            controller.enqueue(
-              encodeLine({ type: "delta", section: name, text: delta }),
-            );
-          });
-
-          await messageStream.finalMessage();
+          for await (const chunk of chatStream) {
+            const delta = chunk.choices[0]?.delta?.content;
+            if (delta) {
+              controller.enqueue(
+                encodeLine({ type: "delta", section: name, text: delta }),
+              );
+            }
+          }
 
           controller.enqueue(encodeLine({ type: "done", section: name }));
         }
