@@ -6,9 +6,9 @@ Upload your resume + paste a job description → get **roasted**, **improved**, 
 
 1. You upload a resume (PDF) and paste a job description.
 2. The app extracts the resume text and runs it through a 3-step prompt chain against that specific job description:
-   - **Roast** — harsh, specific, actionable feedback on what's weak or missing
-   - **Tailored Improvements** — bullet-point fixes mapped directly to the job's requirements
-   - **Cold Outreach Message** — a short, personalized message ready to send to a recruiter or hiring manager
+   - **Roast:** harsh, specific, actionable feedback on what's weak or missing
+   - **Tailored Improvements:** bullet-point fixes mapped directly to the job's requirements
+   - **Cold Outreach Message:** a short, personalized message ready to send to a recruiter or hiring manager
 3. All three outputs stream into the UI live, each with its own copy button.
 
 ## Tech stack
@@ -96,6 +96,6 @@ npm start
 
 ## Notes
 
-- Resume upload currently accepts text-based PDFs (and plain `.txt`) — scanned/image-only PDFs won't extract text.
-- The model is set in `src/lib/ai.ts` (`MODEL` constant) — swap it there to try a different model on OpenRouter.
-- No database, no auth, no persistence — every request is stateless by design for this MVP.
+- Resume upload currently accepts text-based PDFs (and plain `.txt`) scanned/image-only PDFs won't extract text.
+- The model is set in `src/lib/ai.ts` (`MODEL` constant) swap it there to try a different model on OpenRouter.
+- No database, no auth, no persistence every request is stateless by design for this MVP.
